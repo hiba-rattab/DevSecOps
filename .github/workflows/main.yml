@@ -36,7 +36,7 @@ jobs:
       - name: Run Safety for SCA
         run: |
           pip install safety
-          safety check --full-report
+          safety scan --full-report
 
       # Install and run Pyraider for SCA
       - name: Install and run Pyraider
