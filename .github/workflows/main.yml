@@ -2,43 +2,41 @@
 
 name: SCA Workflow
 
-# Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
-    branches: main
+    branches:
+      - main
   pull_request:
-    branches: [ "main" ]
-
-  # Allows you to run this workflow manually from the Actions tab
+    branches:
+      - main
   workflow_dispatch:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   build:
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
+      # Step 1: Checkout repository
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-      # Install dependencies
+      # Step 2: Debug requirements.txt
+      - name: Debug requirements.txt
+        run: cat requirements.txt
+
+      # Step 3: Install dependencies
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          
-          pip install Flask  # Ajout de Flask ici
+          pip install -r requirements.txt
 
-      # Runs Safety for SCA
+      # Step 4: Run Safety for SCA
       - name: Run Safety for SCA
         run: |
-          pip install safety
-          safety scan --full-report
+          pip install safety==1.10.3
+          safety check --full-report --file=requirements.txt
 
-      # Install and run Pyraider for SCA
+      # Step 5: Install and run Pyraider for SCA
       - name: Install and run Pyraider
         run: |
           pip install pyraider
