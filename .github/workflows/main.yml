@@ -1,5 +1,3 @@
-# This is a basic workflow to help you get started with Actions
-
 name: SCA Workflow
 
 on:
@@ -22,7 +20,13 @@ jobs:
 
       # Step 2: Debug requirements.txt
       - name: Debug requirements.txt
-        run: cat requirements.txt
+        run: |
+          if [ -f requirements.txt ]; then
+            cat requirements.txt
+          else
+            echo "requirements.txt not found!"
+            exit 1
+          fi
 
       # Step 3: Install dependencies
       - name: Install dependencies
@@ -34,10 +38,17 @@ jobs:
       - name: Run Safety for SCA
         run: |
           pip install safety==1.10.3
-          safety check --full-report --file=requirements.txt
+          safety check --full-report --file=requirements.txt || { echo 'Safety check failed'; exit 1; }
 
       # Step 5: Install and run Pyraider for SCA
       - name: Install and run Pyraider
         run: |
           pip install pyraider
-          pyraider --path . --output-format json --output-file pyraider_report.json
+          pyraider --path . --output-format json --output-file pyraider_report.json || { echo 'Pyraider execution failed'; exit 1; }
+
+      # Optional: Step 6: Upload Pyraider report as an artifact
+      - name: Upload Pyraider Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: pyraider_report
+          path: pyraider_report.json
