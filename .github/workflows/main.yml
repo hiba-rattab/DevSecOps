@@ -18,15 +18,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Step 2: Debug requirements.txt
-      - name: Debug requirements.txt
-        run: |
-          if [ -f requirements.txt ]; then
-            cat requirements.txt
-          else
-            echo "requirements.txt not found!"
-            exit 1
-          fi
+      # # Step 2: Debug requirements.txt
+      # - name: Debug requirements.txt
+      #   run: |
+      #     if [ -f requirements.txt ]; then
+      #       cat requirements.txt
+      #     else
+      #       echo "requirements.txt not found!"
+      #       exit 1
+      #     fi
 
       # Step 3: Install dependencies
       - name: Install dependencies
