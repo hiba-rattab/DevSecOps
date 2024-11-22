@@ -18,15 +18,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # # Step 2: Debug requirements.txt
-      # - name: Debug requirements.txt
-      #   run: |
-      #     if [ -f requirements.txt ]; then
-      #       cat requirements.txt
-      #     else
-      #       echo "requirements.txt not found!"
-      #       exit 1
-      #     fi
+      # Step 2: Debug requirements.txt
+      - name: Debug requirements.txt
+        run: |
+          if [ -f requirements.txt ]; then
+            cat requirements.txt
+          else
+            echo "requirements.txt not found!"
+            exit 1
+          fi
 
       # Step 3: Install dependencies
       - name: Install dependencies
@@ -38,7 +38,7 @@ jobs:
       - name: Run Safety for SCA
         run: |
           pip install safety==1.10.3
-          # safety check --full-report --file=requirements.txt || { echo 'Safety check failed'; exit 1; }
+          safety check --full-report --file=requirements.txt || { echo 'Safety check failed'; exit 1; }
 
       # Step 5: Install and run Pyraider for SCA
       - name: Install and run Pyraider
